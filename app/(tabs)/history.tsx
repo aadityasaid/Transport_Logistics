@@ -5,7 +5,7 @@ export default function Hisroty() {
     <View
       style={style.container}
     >
-      <Text style={style.text}>history</Text>
+      <Text style={style.text}>history of app</Text>
     </View>
   );
 }
