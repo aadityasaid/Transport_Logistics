@@ -1,45 +1,54 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from "expo-router";
+import {Ionicons} from "@expo/vector-icons";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        tabBarActiveTintColor: "#000000",
+      }}
+    >
+    <Tabs.Screen name="home" options={{
+        headerTitle:"Home",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "home-sharp" : "home-outline"}  color={color} size={23}/>),
+    }}/>
+    
+    <Tabs.Screen name="history" options={{
+        headerTitle:"History",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "time-sharp" : "time-outline"}  color={color} size={25}/>),
+    }}/>
+
+
+  <Tabs.Screen name="create" options={{
+        headerTitle:"Create",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "add-circle-sharp" : "add-circle-outline"}  color={color} size={25}/>),
+    }}/>
+
+
+  <Tabs.Screen name="notification" options={{
+        headerTitle:"Notification",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "notifications-circle-sharp" : "notifications-circle-outline"}  color={color} size={25}/>),
+    }}/>
+
+
+  <Tabs.Screen name="profile" options={{
+        headerTitle:"{Profile}",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "people-circle-sharp" : "people-circle-outline"}  color={color} size={25}/>),
+    }}/>
+
+
+    
+
+
+
+
+
+    
+
     </Tabs>
   );
 }
+
+
+
