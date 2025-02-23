@@ -6,8 +6,11 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#000000",
+        // tabBarActiveTintColor: "#000000",
+        tabBarActiveTintColor: "#290D85",
+        
       }}
+
     >
     <Tabs.Screen name="home" options={{
         headerTitle:"Home",
@@ -21,7 +24,7 @@ export default function TabsLayout() {
 
 
   <Tabs.Screen name="create" options={{
-        headerTitle:"Create",
+        headerTitle:"Upload Parcel Details",
         tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "add-circle-sharp" : "add-circle-outline"}  color={color} size={25}/>),
     }}/>
 
@@ -33,8 +36,8 @@ export default function TabsLayout() {
 
 
   <Tabs.Screen name="profile" options={{
-        headerTitle:"{Profile}",
-        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "people-circle-sharp" : "people-circle-outline"}  color={color} size={25}/>),
+        headerTitle:"Profile",
+        tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "person-circle-sharp" : "person-circle-outline"}  color={color} size={25}/>),
     }}/>
 
 

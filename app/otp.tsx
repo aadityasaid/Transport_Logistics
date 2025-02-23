@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     changeText: {
       color: "blue",
       fontSize: 16,
+      marginTop:20,
+      marginLeft: 30,
     },
     infoText: {
       color: "#666",
@@ -78,9 +80,10 @@ const styles = StyleSheet.create({
       width: 250,
       height: 250,
       marginTop: -120,
-      marginBottom: 70,
+      marginBottom: -30,
       resizeMode: 'contain',
     },
+    
 });
 
 const OTPLogin = () => {
@@ -101,9 +104,23 @@ const OTPLogin = () => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          <Image source={require('../assets/images/tw-logo.png')} style={styles.logo}/>
+          <Image source={require('../assets/images/tw-logo.png')} style={styles.logo}/> 
+          
+          
+          
+           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TextInput
+              style={[styles.input, { borderColor: '#ccc', padding: 0 }]}
+              placeholder="Enter Phone Number"
+              keyboardType="phone-pad"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              maxLength={10}
+            />
+            <Text style={styles.changeText} onPress={() => router.push('/')}>Edit</Text>
+          </View> 
 
-          <Text style={styles.phoneNumber}>{phoneNumber || "8007756958"} <Text style={styles.changeText}>Change</Text></Text>
+
           
           <Text style={styles.infoText}>One Time Password (OTP) is sent to this number</Text>
           
