@@ -30,7 +30,17 @@ export default function RootLayout() {
               headerTitle:"Sign Up Now",
             }}/>
 
+
+            <Stack.Screen name="bidscreen" options={{
+              headerTitle:"Bid ",
+            }}/>
+
+
+
+            
+
             </Stack>
+          
     </>
   );
 }

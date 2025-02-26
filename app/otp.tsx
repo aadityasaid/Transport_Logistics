@@ -140,7 +140,7 @@ const OTPLogin = () => {
             maxLength={4}
           />
 
-          <TouchableOpacity style={styles.verifyButton} onPress={() => router.push('/loder')}>
+          <TouchableOpacity style={styles.verifyButton} onPress={() => router.push('/home')}>
             <Text style={styles.verifyText}>Verify OTP</Text>
           </TouchableOpacity>
 
