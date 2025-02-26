@@ -46,14 +46,9 @@ const LoginScreen = () => {
           Sign up now
         </Link>
 
-        
-
         <Link href="/home" style={styles.h123}>
          home
         </Link>
-
-
-
 
       </View>
     </SafeAreaView>

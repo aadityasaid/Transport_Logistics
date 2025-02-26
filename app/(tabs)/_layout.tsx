@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
-
+import Feather from "react-native-vector-icons/Feather"; // Import Feather Icons
 
 export default function TabsLayout() {
   return (
@@ -38,11 +38,7 @@ export default function TabsLayout() {
   <Tabs.Screen name="profile" options={{
         headerTitle:"Profile",
         tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "person-circle-sharp" : "person-circle-outline"}  color={color} size={25}/>),
-    }}/>
-
-
-    
-
+    }}/> 
 
 
 

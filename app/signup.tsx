@@ -56,6 +56,14 @@ const SignUpScreen = () => {
         <TouchableOpacity style={styles.loginButton} onPress={() => router.push('/otp')}>
           <Text style={styles.loginText}>Get OTP</Text>
         </TouchableOpacity>
+
+        <Text style={styles.sign_up_text_button}>Already have an account?</Text>
+        <Link href="/" style={styles.button}>
+          Login
+        </Link>
+
+
+
       </View>
     </SafeAreaView>
   );
@@ -130,6 +138,18 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     resizeMode: 'contain',
   },
+  
+  sign_up_text_button: {
+    position: 'absolute',
+    bottom: -130,
+    fontSize: 17,
+    color: '#808080',
+  },
+  button: {
+    position: 'absolute',
+    bottom: -160,
+    fontSize: 17,
+    color: '#0000FF'}
 });
 
 export default SignUpScreen;
