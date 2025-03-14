@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,116 +7,97 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Linking,
+  ScrollView,
 } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
 
-// Dummy Bidding Data
 const bids = [
   { id: "1", name: "Satish More", amount: "160 Rs", time: "12:05 PM", rating: 4.0, reviews: 20, phone: "9302535457" },
-  { id: "2", name: "Satish More", amount: "160 Rs", time: "12:05 PM", rating: 4.0, reviews: 20, phone: "9302535457" },
-  { id: "3", name: "Satish More", amount: "160 Rs", time: "12:05 PM", rating: 4.0, reviews: 20, phone: "9302535457" },
+  { id: "2", name: "Satish More", amount: "165 Rs", time: "12:10 PM", rating: 4.2, reviews: 15, phone: "9302535458" },
+  { id: "3", name: "Ankit Sharma", amount: "170 Rs", time: "12:15 PM", rating: 4.5, reviews: 25, phone: "9302535459" },
 ];
 
-// Local images for the slider
 const images = [
   require("../assets/images/box.png"),
-  require("../assets/images/favicon.png"),
-  require("../assets/images/box.png"),
+  require("../assets/images/box1.png"),
+  require("../assets/images/box2.png"),
 ];
+
+const dialNumber = (number) => {
+  Linking.openURL(`tel:${number}`);
+};
 
 const BidsScreen = () => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedBid, setSelectedBid] = useState(null); // Track selected bid
+  const [selectedBid, setSelectedBid] = useState(null);
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 1500); // Change image every 1.5 seconds
-
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
+  const handleBidPress = (bid) => {
+    setSelectedBid(selectedBid?.id === bid.id ? null : bid);
+  };
+
   return (
-    <View style={styles.container}>
-      
-
-      {/* Parcel Card */}
+    <ScrollView style={styles.container}>
       <View style={styles.card}>
-        {/* Image Slider */}
-        <View style={styles.imageContainer}>
-          <Image source={images[activeIndex]} style={styles.image} />
-        </View>
+        <FlatList
+          ref={flatListRef}
+          data={images}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.imageContainer}>
+              <Image source={item} style={styles.image} />
+            </View>
+          )}
+          onMomentumScrollEnd={(event) => {
+            const index = Math.floor(event.nativeEvent.contentOffset.x / width);
+            setActiveIndex(index);
+          }}
+        />
 
-        {/* Dots Indicator */}
-        <View style={styles.dotContainer}>
-          {images.map((_, index) => (
-            <View key={index} style={[styles.dot, activeIndex === index && styles.activeDot]} />
-          ))}
-        </View>
-
-        <Text style={styles.category}>
-          <Text style={styles.bold}>Category:</Text> Electronics
-        </Text>
-        <Text style={styles.posted}>Posted 2 hours ago</Text>
-
-        <Text style={styles.detailsTitle}>Parcel details:</Text>
-        <Text style={styles.details}>Dimensions: 30cm x 30cm x 20cm</Text>
-        <Text style={styles.details}>Weight: 5Kg</Text>
-
-        {/* Bidding Section */}
         <Text style={styles.bidsTitle}>Existing Bids</Text>
 
-        {selectedBid ? (
-          // Expanded Bid Card
-          <View style={styles.expandedBidCard}>
-            <View style={styles.bidHeader}>
-              <FontAwesome name="user" size={16} color="black" />
-              <Text style={styles.bidderName}>Bidder: {selectedBid.name}</Text>
-              <View style={styles.rating}>
-                <FontAwesome name="star" size={16} color="#FFD700" />
-                <Text style={styles.ratingText}>{selectedBid.rating} ({selectedBid.reviews})</Text>
-              </View>
-            </View>
-            <Text style={styles.bidDetails}>Time: {selectedBid.time}</Text>
-            <Text style={styles.bidDetails}>Contact Details: </Text>
-            <Text style={styles.bidDetails}>Ph No: {selectedBid.phone}</Text>
-            <TouchableOpacity style={styles.callIcon}>
-              <MaterialIcons name="call" size={24} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.bidDetails}>Amount: {selectedBid.amount}</Text>
+        <FlatList
+          data={bids}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleBidPress(item)} style={selectedBid?.id === item.id ? styles.expandedBidCard : styles.bidCard}>
+              <Text style={styles.bidderName}>Bidder: {item.name}</Text>
+              <Text style={styles.bidDetails}>Amount: {item.amount}</Text>
+              <Text style={styles.bidDetails}>Time: {item.time}</Text>
 
-            {/* Accept & Pay Button */}
-            <TouchableOpacity style={styles.payButton} onPress={() => console.log("Accept & Pay")}>
-              <Text style={styles.payButtonText}>Accept & Pay</Text>
+              {selectedBid?.id === item.id && (
+                <>
+                  <Text style={styles.bidDetails}>Rating: {item.rating} ⭐</Text>
+                  <Text style={styles.bidDetails}>Reviews: {item.reviews}</Text>
+                  <TouchableOpacity style={styles.callContainer} onPress={() => dialNumber(item.phone)}>
+                    <MaterialIcons name="call" size={24} color="#0000FF" />
+                    <Text style={styles.bidDetailsPhNo}>Ph No: {item.phone}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.payButton} onPress={() => router.push('/payment')}>
+                    <Text style={styles.payButtonText}>Accept & Pay</Text>
+                  </TouchableOpacity>
+                </>
+              )}
             </TouchableOpacity>
-          </View>
-        ) : (
-          // List of Bids
-          <FlatList
-            data={bids}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => setSelectedBid(item)} style={styles.bidCard}>
-                <View style={styles.bidHeader}>
-                  <FontAwesome name="user" size={16} color="black" />
-                  <Text style={styles.bidderName}>Bidder: {item.name}</Text>
-                  <View style={styles.rating}>
-                    <FontAwesome name="star" size={16} color="#FFD700" />
-                    <Text style={styles.ratingText}>{item.rating} ({item.reviews})</Text>
-                  </View>
-                </View>
-                <Text style={styles.bidDetails}>Time: {item.time}</Text>
-                <Text style={styles.bidDetails}>Amount: {item.amount}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
+          )}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -126,62 +107,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     padding: 15,
   },
-  backButton: {
-    position: "absolute",
-    top: 15,
-    left: 10,
-    zIndex: 10,
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-  },
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
     elevation: 5,
     marginBottom: 10,
   },
   imageContainer: {
-    width: width - 30,
-    height: 200,
+    width: width - 50,
+    height: 250,
     borderRadius: 5,
     overflow: "hidden",
     alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
-  },
-  dotContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 8,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#ccc",
-    marginHorizontal: 5,
-  },
-  activeDot: {
-    backgroundColor: "#000",
-  },
-  category: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  bold: {
-    fontWeight: "bold",
+    resizeMode: "contain",
+    alignSelf: "center",
   },
   bidsTitle: {
     fontWeight: "bold",
@@ -195,40 +141,32 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   expandedBidCard: {
-    backgroundColor: "#EAEAEA",
+    backgroundColor: "#D3D3D3",
     padding: 15,
     borderRadius: 8,
     marginVertical: 5,
-  },
-  bidHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
   bidderName: {
     fontSize: 14,
     fontWeight: "bold",
   },
-  rating: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  ratingText: {
-    fontSize: 14,
-    marginLeft: 5,
-    fontWeight: "bold",
-  },
   bidDetails: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#333",
   },
-  callIcon: {
-    alignSelf: "flex-start",
+  bidDetailsPhNo: {
+    fontSize: 16,
+    color: "#0000FF",
+    marginLeft: 10,
+  },
+  callContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 5,
   },
   payButton: {
     alignSelf: "center",
-    width:"65%",
+    width: "65%",
     backgroundColor: "#213A83",
     padding: 12,
     borderRadius: 30,

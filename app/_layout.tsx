@@ -27,7 +27,9 @@ export default function RootLayout() {
             }}/>
 
             <Stack.Screen name="signup" options={{
-              headerTitle:"Sign Up Now",
+              // headerTitle:"Sign Up Now",
+              headerShown:false,
+
             }}/>
 
 
@@ -35,6 +37,24 @@ export default function RootLayout() {
               headerTitle:"Bid ",
             }}/>
 
+
+            <Stack.Screen name="payment" options={{
+              headerTitle:"Payment ",
+            }}/>
+
+
+            <Stack.Screen name="add-upi-id" options={{
+              headerTitle:"Add new UPI ID ",
+            }}/>
+
+
+            <Stack.Screen name="edit-profile" options={{
+              headerTitle:"Edit Profile ",
+            }}/>
+
+            <Stack.Screen name="setting" options={{
+              headerTitle:"Setting ",
+            }}/>
 
 
             

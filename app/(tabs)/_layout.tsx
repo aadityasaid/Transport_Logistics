@@ -36,11 +36,14 @@ export default function TabsLayout() {
 
 
   <Tabs.Screen name="profile" options={{
-        headerTitle:"Profile",
+        // headerTitle:"Profile",
+        headerShown:false,
         tabBarIcon: ({focused, color}) => (<Ionicons name={focused ? "person-circle-sharp" : "person-circle-outline"}  color={color} size={25}/>),
     }}/> 
 
 
+    
+    
 
 
     
