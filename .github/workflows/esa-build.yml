@@ -1,17 +1,18 @@
-name: EAS Android Preview Build
+name: Lint check
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [main, develop]
+  # pull_request:
+  #   branches: [main]
 
 jobs:
-  build-android:
+  lint:
+    name: Run ESLint
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: 🔧 Setup Node.js
@@ -19,22 +20,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: 📦 Install Project Dependencies
+      - name: 📦 Install Dependencies
         run: npm install
 
-      - name: 📦 Ensure expo-dev-client is installed
-        run: |
-          if ! npm list expo-dev-client >/dev/null 2>&1; then
-            echo "Installing expo-dev-client..."
-            npx expo install expo-dev-client
-          else
-            echo "expo-dev-client is already installed."
-          fi
-
-      - name: 🧰 Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: 🚀 Trigger EAS Android Build (preview profile)
-        run: eas build -p android --profile preview --non-interactive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      - name: 🧪 Run ESLint
+        run: npm run lint
