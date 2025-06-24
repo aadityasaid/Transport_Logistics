@@ -27,9 +27,9 @@ jobs:
       - name: 🔐 Login to EAS
         run: eas whoami
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_TOKEN: "f0wZo_P8yDn4tPZc38YX4S-RNWVAGOSLaAmDv3GN"
 
       - name: 🚀 Trigger EAS Android Build (Preview Profile)
         run: eas build -p android --profile preview --non-interactive
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_TOKEN: "f0wZo_P8yDn4tPZc38YX4S-RNWVAGOSLaAmDv3GN"
