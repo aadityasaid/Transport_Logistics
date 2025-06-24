@@ -1,16 +1,17 @@
-# File: .github/workflows/eas-build.yml
-name: EAS Android Build
+name: EAS Android Preview Build
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  eas-build:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
       - name: 🔧 Setup Node.js
@@ -18,18 +19,22 @@ jobs:
         with:
           node-version: 18
 
-      - name: 📦 Install dependencies
+      - name: 📦 Install Project Dependencies
         run: npm install
 
-      - name: 📦 Install EAS CLI globally
+      - name: 📦 Ensure expo-dev-client is installed
+        run: |
+          if ! npm list expo-dev-client >/dev/null 2>&1; then
+            echo "Installing expo-dev-client..."
+            npx expo install expo-dev-client
+          else
+            echo "expo-dev-client is already installed."
+          fi
+
+      - name: 🧰 Install EAS CLI
         run: npm install -g eas-cli
 
-      - name: 🔐 Login to EAS
-        run: eas whoami
-        env:
-          EXPO_TOKEN: "f0wZo_P8yDn4tPZc38YX4S-RNWVAGOSLaAmDv3GN"
-
-      - name: 🚀 Trigger EAS Android Build (Preview Profile)
+      - name: 🚀 Trigger EAS Android Build (preview profile)
         run: eas build -p android --profile preview --non-interactive
         env:
-          EXPO_TOKEN: "f0wZo_P8yDn4tPZc38YX4S-RNWVAGOSLaAmDv3GN"
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

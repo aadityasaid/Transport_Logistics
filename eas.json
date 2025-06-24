@@ -1,14 +1,8 @@
 {
-    "cli": {
-      "version": ">= 3.0.0"
-    },
     "build": {
       "preview": {
-        "developmentClient": false,
+        "developmentClient": true,
         "distribution": "internal"
-      },
-      "production": {
-        "distribution": "store"
       }
     }
   }
